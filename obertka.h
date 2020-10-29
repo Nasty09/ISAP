@@ -13,8 +13,7 @@ public:
     mp(int _a){mp_err err = mp_init(&a); mp_set_l(&a, _a);}
     mp(mp_int _a) {mp_err err = mp_init_copy(&a,&_a);}
     mp() {mp_err err = mp_init(&a);}
-    mp(const mp& other)
-    { mp_err err = mp_init_copy(&a, &other.a); }
+    mp(const mp& other) { mp_err err = mp_init_copy(&a, &other.a); }
     ~mp(){mp_clear(&a);}
 
     mp& operator=(const mp& other)
