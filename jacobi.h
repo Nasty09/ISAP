@@ -4,7 +4,7 @@
 #ifndef JACOBI_HPP
 #define JACOBI_HPP
 
-mp alph ,beta, koef;
+mp koef;
 
 class point
 {
@@ -22,22 +22,17 @@ public:
     bool operator!= (const point& A) { return !(*this == A); }
     friend std::ostream& operator<< (std::ostream& out, point A)
     {
-        int radix = 10;
-        mp_err err;
-        out << "(" << A._x << ", " << A._y << ", " << A._z << ", " << A._t << ")\n";
+        out << "(" << A._x << ", \n" << A._y << ", \n" << A._z << ", \n" << A._t << ")\n";
         return out;
     }
 
     bool in()
     {
-
-        return _x.sqr_mod() + _y.sqr_mod() - _t.sqr_mod() == mp(0) &&
-            koef * _x.sqr_mod() + _z.sqr_mod() - _t.sqr_mod() == mp(0);
-//        return _x.sqr_mod() - _z * _t == mp(0) &&
-//                _y.sqr_mod() - alph * _x * _z - beta * _z.sqr_mod() - _x * _t == mp(0);
+        return _x.sqr_mod() + _y.sqr_mod() == _t.sqr_mod() &&
+            koef * _x.sqr_mod() + _z.sqr_mod() == _t.sqr_mod();
     }
 
-    point otr() { _x.otr(); return *this; }
+    point otr() { _x=_x.otr(); return *this; }
 
     point operator+ (point &A)
     {
@@ -48,18 +43,17 @@ public:
                 (_z * _t).sqr_mod() - (_y * _t).sqr_mod() + (_y * _z).sqr_mod(),
                 (_z * _t).sqr_mod() + (_y * _t).sqr_mod() - (_y * _z).sqr_mod());
         }
-            else
-            {
-                return point(_x * A._y * A._z * _t + A._x * _y * _z * A._t,
-                    _y * A._y * A._t * _t - A._x * _x * _z * A._z,
-                    _z * A._z * A._t * _t - koef * A._x * _x * _y * A._y,
-                    (_t * A._y).sqr_mod() + (_z * A._x).sqr_mod());
-            }
+        else
+        {
+            return point(_x * A._y * A._z * _t + A._x * _y * _z * A._t,
+                _y * A._y * A._t * _t - A._x * _x * _z * A._z,
+                _z * A._z * A._t * _t - koef * A._x * _x * _y * A._y,
+                (_t * A._y).sqr_mod() + (_z * A._x).sqr_mod());
+        }
     }
 
     point crat(mp k)
     {
-        std::cout << k << ": ";
         point Q, P = *this;
         int n = 0;
         bool buf[257];
@@ -70,6 +64,8 @@ public:
             k = k / mp(2);
             ++n;
         }
+        buf[n]=0;
+        n++;
         for (int i = n - 1; i >= 0; i--)
         {
             if (buf[i] == 0)
@@ -82,9 +78,7 @@ public:
                 Q = Q + P;
                 P = P + P;
             }
-            std::cout << buf[i];
         }
-        std::cout << "\n" << Q << "\n";
         return Q;
     }
 };

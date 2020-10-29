@@ -9,23 +9,25 @@ class mp
 {
     mp_int a;
 public:
-//    mp(const char *_a){mp_int c; mp_err err = mp_init(&c); err = mp_init(&a);mp_read_radix(&c, _a, 10); mp_init_copy(&a, &c); mp_clear(&c);}
-//    mp(int _a){mp_int c; mp_err err = mp_init(&c); err = mp_init(&a);mp_set_l(&c, _a); mp_init_copy(&a, &c); mp_clear(&c);}
-//    mp(mp_int _a) {mp_err err = mp_init(&a);mp_init_copy(&a,&_a);}
     mp(const char *_a){mp_err err = mp_init(&a); mp_read_radix(&a, _a, 10);}
     mp(int _a){mp_err err = mp_init(&a); mp_set_l(&a, _a);}
     mp(mp_int _a) {mp_err err = mp_init_copy(&a,&_a);}
     mp() {mp_err err = mp_init(&a);}
-    ~mp(){}
+    mp(const mp& other)
+    { mp_err err = mp_init_copy(&a, &other.a); }
+    ~mp(){mp_clear(&a);}
 
-    void set(int b){*this = mp(b);}
-    void set(char b){*this = mp(b);}
-
+    mp& operator=(const mp& other)
+    {
+        mp_clear(&a);
+        mp_err err = mp_init_copy(&a, &other.a);
+        return *this;
+    }
     mp operator* (mp b)
     {
         mp c;
         mp_err err;
-        err = mp_mulmod(&b.a, &this->a, &p, &c.a);
+        err = mp_mulmod(&this->a, &b.a, &p, &c.a);
         return c;
     }
     bool operator% (mp b)
@@ -78,13 +80,12 @@ public:
         err = mp_sqrmod(&this->a, &p, &c.a);
         return c;
     }
-    mp sqrt()
+    mp otr()
     {
-        mp c;
-        mp_err err;
-        err = mp_sqrt(&this->a, &c.a);
-        return c;
+        mp b;
+        mp_neg(&this->a, &this->a);
+        mp_mod(&this->a, &p, &b.a);
+        return b;
     }
-    mp otr() { mp b; mp_neg(&this->a, &this->a); mp_mod(&this->a, &b.a, &p); return b; }
 };
 #endif
