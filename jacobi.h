@@ -13,11 +13,6 @@ public:
     point(mp x = 0, mp y = 1, mp z = 1, mp t = 1) : _x(x), _y(y), _z(z), _t(t) {};
     ~point(){};
 
-    mp get_x() { return _x; }
-    mp get_y() { return _y; }
-    mp get_z() { return _z; }
-    mp get_t() { return _t; }
-
     bool operator== (const point& A) { return _x == A._x && _y == A._y && _z == A._z && _t == A._t; }
     bool operator!= (const point& A) { return !(*this == A); }
     friend std::ostream& operator<< (std::ostream& out, point A)
