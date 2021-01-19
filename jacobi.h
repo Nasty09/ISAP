@@ -21,7 +21,6 @@ public:
         Y = _x * koef * L;
         Z = _y * koef - _z + _t * L;
         mp obrkoef = Z.AlgEucl();
-//        obrkoef="73711834352806432289338587559875501862591637594935875257046220570245199969922";
         X = X * obrkoef;
         Y = Y * obrkoef;
         Z = Z * obrkoef;

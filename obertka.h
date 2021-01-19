@@ -92,6 +92,7 @@ public:
         mp_mod(&this->a, &p, &b.a);
         return b;
     }
+
     mp AlgEucl()
     {
         mp P = p, Z = a;
