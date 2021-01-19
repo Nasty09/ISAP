@@ -8,6 +8,7 @@ int main()
     mp_init(&p);
     mp_read_radix(&p, "115792089237316195423570985008687907853269984665640564039457584007913111864739", 10);
     koef = "115792089237316195423570985008687907853269984665640564039457584007913111864737";
+//    obrkoef = "80649002578398127694209142740103442227026009102704583602066173580125678429941";
     mp      q = "4824670384888174809315457708695329493868526062531865828358260708486391273721",
             x = "86773867670483746082709700497332781598034016226947998080571074369332058445893",
             y = "112365783073842736181650671369471258524588261898469739668735228897200995462257",
@@ -26,22 +27,22 @@ int main()
     Q2 = P.crat(k2);
 
     Q3 = P.crat(mp(4)*q);
-    std::cout << "tochka kratnosti 4q:\n"<<Q3 << "\nneitralnaya: \n" << point() << "\n\n";
+    std::cout << "tochka kratnosti 4q:\n"<<Q3<< "\nneitralnaya: \n" << point() << "\n\n";
 
     Q3 = P.crat(mp(4)*q-1);
-    std::cout << "proverka na ravenstvo tochki kratnosti 4q-1 i -P: "<< (Pneg == Q3) << "\n";
-    std::cout << "tochka kratnosti 4q-1:\n" << Q3 << "\n-P: \n" << Pneg << "\n\n";
+    std::cout << "proverka na ravenstvo tochki kratnosti 4q-1 i -P: "<< (Pneg.from_pol_to() == Q3.from_pol_to()) << "\n";
+    std::cout << "tochka kratnosti 4q-1:\n" << Q3.from_pol_to() << "\n-P: \n" << Pneg.from_pol_to() << "\n\n";
 
     Q3 = P.crat(mp(4)*q+1);
-    std::cout << "proverka na ravenstvo tochki kratnosti 4q+1 i P: " << (P == Q3) << "\n";
-    std::cout << "tochka kratnosti 4q+1:\n"<<Q3 << "\nP: \n"<<P<<"\n\n";
+    std::cout << "proverka na ravenstvo tochki kratnosti 4q+1 i P: " << (P.from_pol_to() == Q3.from_pol_to()) << "\n";
+    std::cout << "tochka kratnosti 4q+1:\n"<<Q3.from_pol_to() << "\nP: \n"<<P.from_pol_to()<<"\n\n";
 
     Q4 = Q2 + Q1;
-    std::cout << "proverka na prinadleznost summi tochek kratnosti k1 i k2:" << Q4.in() << "\n";
-    std::cout << "summa tochek kratnosti k1 i k2:\n" << Q4 << "\n";
+    std::cout << "proverka na prinadleznost summi tochek kratnosti k1 i k2: " << Q4.in() << "\n";
+    std::cout << "summa tochek kratnosti k1 i k2:\n" << Q4.from_pol_to() << "\n";
     Q5 = P.crat(k3);
-    std::cout << "tochka kratnosti k3:\n"<<Q5<<"\n";
-    std::cout << "proverka na ravenstvo summi tochek kratnosti k1 i k2 i tochki kratnosti k3: "<<(Q4 == Q5) << "\n\n";
+    std::cout << "tochka kratnosti k3:\n"<<Q5.from_pol_to()<<"\n";
+    std::cout << "proverka na ravenstvo summi tochek kratnosti k1 i k2 i tochki kratnosti k3: "<<(Q4.from_pol_to() == Q5.from_pol_to()) << "\n\n";
     mp_clear(&p);
     return 0;
 }

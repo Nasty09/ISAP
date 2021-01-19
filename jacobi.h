@@ -13,6 +13,21 @@ public:
     point(mp x = 0, mp y = 1, mp z = 1, mp t = 1) : _x(x), _y(y), _z(z), _t(t) {};
     ~point(){};
 
+    point from_pol_to ()
+    {
+        mp X,Y,Z,L;
+        L = mp(1) - koef;
+        X = (_z - _t) * L;
+        Y = _x * koef * L;
+        Z = _y * koef - _z + _t * L;
+        mp obrkoef = Z.AlgEucl();
+//        obrkoef="73711834352806432289338587559875501862591637594935875257046220570245199969922";
+        X = X * obrkoef;
+        Y = Y * obrkoef;
+        Z = Z * obrkoef;
+        return point(X,Y,Z,mp(0));
+    }
+
     bool operator== (const point& A) { return _x == A._x && _y == A._y && _z == A._z && _t == A._t; }
     bool operator!= (const point& A) { return !(*this == A); }
     friend std::ostream& operator<< (std::ostream& out, point A)
@@ -27,7 +42,7 @@ public:
             koef * _x.sqr_mod() + _z.sqr_mod() == _t.sqr_mod();
     }
 
-    point otr() { _x=_x.otr(); return *this; }
+    point otr() { _x = mp(0) - _x; return *this; }
 
     point operator+ (point &A)
     {
@@ -51,24 +66,23 @@ public:
     {
         point Q, P = *this;
         int n = 0;
-        bool buf[257];
-        mp zero(0);
+        mp buf[257], zero(0);
         while (!(k == zero))
         {
             buf[n] = k % mp(2);
             k = k / mp(2);
             ++n;
         }
-        buf[n]=0;
+        buf[n]=mp(0);
         n++;
         for (int i = n - 1; i >= 0; i--)
         {
-            if (buf[i] == 0)
+            if (buf[i] == mp(0))
             {
                 P = P + Q;
                 Q = Q + Q;
             }
-            if (buf[i] == 1)
+            if (buf[i] == mp(1))
             {
                 Q = Q + P;
                 P = P + P;

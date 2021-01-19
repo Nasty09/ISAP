@@ -29,13 +29,12 @@ public:
         err = mp_mulmod(&this->a, &b.a, &p, &c.a);
         return c;
     }
-    bool operator% (mp b)
+    mp operator% (mp b)
     {
         mp c, d;
         mp_err err;
         err = mp_div(&this->a, &b.a, &c.a, &d.a);
-        if (d == mp(0)) return 0;
-        else return 1;
+        return d;
     }
     mp operator/ (mp b)
     {
@@ -64,6 +63,13 @@ public:
             return 1;
         return 0;
     }
+    bool operator!= (mp b) {return !(b==*this);}
+    bool operator> (mp b)
+    {
+        if (mp_cmp(&this->a, &b.a) == 1)
+            return 1;
+        return 0;
+    }
     friend std::ostream& operator<< (std::ostream& out, const mp A)
     {
         int radix = 10;
@@ -85,6 +91,28 @@ public:
         mp_neg(&this->a, &this->a);
         mp_mod(&this->a, &p, &b.a);
         return b;
+    }
+    mp AlgEucl()
+    {
+        mp P = p, Z = a;
+        mp u1=1, u2=0, v1=0, v2=1, t0, t1;
+        while (Z != mp(0) && P != mp(0))
+        {
+            if (P>Z || P==Z)
+            {
+                P = P - Z;
+                u1 = u1 - v1;
+                u2 = u2 - v2;
+            }
+            else
+            {
+                Z = Z - P;
+                v1 = v1 - u1;
+                v2 = v2 - u2;
+            }
+        }
+        if (P!=mp(0)) return u2;
+        else return v2;
     }
 };
 #endif
