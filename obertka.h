@@ -95,25 +95,22 @@ public:
 
     mp AlgEucl()
     {
-        mp P = p, Z = a;
-        mp u1=1, u2=0, v1=0, v2=1, t0, t1;
+        mp P = p, Z = a, u = 0, v = 1;
         while (Z != mp(0) && P != mp(0))
         {
-            if (P>Z || P==Z)
+            if (P > Z || P == Z)
             {
                 P = P - Z;
-                u1 = u1 - v1;
-                u2 = u2 - v2;
+                u = u - v;
             }
             else
             {
                 Z = Z - P;
-                v1 = v1 - u1;
-                v2 = v2 - u2;
+                v = v - u;
             }
         }
-        if (P!=mp(0)) return u2;
-        else return v2;
+        if (P != mp(0)) return u;
+        else return v;
     }
 };
 #endif
